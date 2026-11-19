@@ -48,39 +48,41 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Design system « Comptoir » — encrier sur porcelaine, accent bleu profond unique.
+   Définition de référence : design-options.html (option A). */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #f5f6f4;
+  --foreground: #1b1e23;
+  --card: #ffffff;
+  --card-foreground: #1b1e23;
+  --popover: #ffffff;
+  --popover-foreground: #1b1e23;
+  --primary: #14566b;
+  --primary-foreground: #ffffff;
+  --secondary: #e9ebe6;
+  --secondary-foreground: #1b1e23;
+  --muted: #edefea;
+  --muted-foreground: #58616e;
+  --accent: #e4ebee;
+  --accent-foreground: #0e4252;
+  --destructive: #a03024;
+  --border: #d8dce2;
+  --input: #d8dce2;
+  --ring: #14566b;
+  --chart-1: #14566b;
+  --chart-2: #3d7b90;
+  --chart-3: #58616e;
+  --chart-4: #9aa3ad;
+  --chart-5: #d8dce2;
+  --radius: 0.375rem;
+  --sidebar: #f0f1ee;
+  --sidebar-foreground: #1b1e23;
+  --sidebar-primary: #14566b;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e4ebee;
+  --sidebar-accent-foreground: #0e4252;
+  --sidebar-border: #d8dce2;
+  --sidebar-ring: #14566b;
 }
 
 .dark {

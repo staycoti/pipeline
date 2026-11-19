@@ -29,12 +29,12 @@ export default async function AdminContactsPage({
       <h1 className="text-2xl font-semibold mb-6">Contacts</h1>
 
       {error ? (
-        <p className="mb-4 rounded border border-red-300 bg-red-50 p-3 text-red-800">
+        <p className="mb-4 rounded border border-destructive/40 bg-destructive/10 p-3 text-destructive">
           {error}
         </p>
       ) : null}
       {added ? (
-        <p className="mb-4 rounded border border-green-300 bg-green-50 p-3 text-green-800">
+        <p className="mb-4 rounded border border-accent-foreground/25 bg-accent p-3 text-accent-foreground">
           Contact ajouté.
         </p>
       ) : null}
@@ -48,29 +48,29 @@ export default async function AdminContactsPage({
           name="name"
           placeholder="Nom *"
           required
-          className="rounded border border-neutral-300 p-2"
+          className="rounded border border-input bg-card p-2 placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-ring/40 focus-visible:outline-offset-1"
         />
         <input
           name="email"
           type="email"
           placeholder="Email"
-          className="rounded border border-neutral-300 p-2"
+          className="rounded border border-input bg-card p-2 placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-ring/40 focus-visible:outline-offset-1"
         />
         <input
           name="company"
           placeholder="Société"
-          className="rounded border border-neutral-300 p-2"
+          className="rounded border border-input bg-card p-2 placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-ring/40 focus-visible:outline-offset-1"
         />
         <button
           type="submit"
-          className="self-start rounded bg-neutral-900 px-4 py-2 text-white"
+          className="self-start rounded bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Ajouter
         </button>
       </form>
 
       {contacts.length === 0 ? (
-        <p className="text-neutral-500">Aucun contact pour le moment.</p>
+        <p className="text-muted-foreground">Aucun contact pour le moment.</p>
       ) : (
         <table className="w-full border-collapse text-sm">
           <thead>
