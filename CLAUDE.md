@@ -14,7 +14,7 @@ pnpm build          # build de prod — À LANCER AVANT LES TESTS : Next 16 gén
 pnpm test           # vitest run
 pnpm lint           # eslint
 pnpm exec tsc --noEmit
-pnpm vitest run src/server/data/contacts-repo.test.ts        # un seul fichier
+pnpm vitest run __tests__/server/data/contacts-repo.test.ts  # un seul fichier
 pnpm vitest run -t "survit à une fermeture"                    # un seul test
 ```
 
@@ -32,6 +32,6 @@ La base locale est `data/pipeline.db` (gitignorée, surcharge par `PIPELINE_DB_P
 ## Pièges propres à ce repo
 
 - **Next 16 + `cacheComponents`** : `export const dynamic = "force-dynamic"` est interdit. Une page qui lit la base ou les `searchParams` au rendu doit déclarer `export const instant = false`. Voir `AGENTS.md` : ce Next diffère de celui des données d'entraînement — lire `node_modules/next/dist/docs/` avant d'utiliser une API qu'on croit connaître.
-- Tests : les règles métier se testent avec un faux repository (pas de base) ; la persistance se teste sur **vraie base** dans un fichier temporaire — jamais de mock pour prouver la persistance.
+- Tests : tous dans `__tests__/` à la racine, arborescence miroir de `src/` (configuré dans `vitest.config.ts`). Les règles métier se testent avec un faux repository (pas de base) ; la persistance se teste sur **vraie base** dans un fichier temporaire — jamais de mock pour prouver la persistance.
 - Git : on travaille sur la branche `dev` (défaut du repo), identité d'auteur locale `testcode`. Pas de commit ni de push sans demande explicite ; push ≠ merge dans `main`.
 - Déploiement Vercel prévu mais non fait : en prod serverless, le fichier SQLite ne survivrait pas — Turso est la condition du critère de persistance en prod.

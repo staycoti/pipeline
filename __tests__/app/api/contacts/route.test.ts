@@ -19,7 +19,7 @@ afterAll(() => {
 
 describe("POST /api/contacts", () => {
   it("insère le contact en base puis redirige (303)", async () => {
-    const { POST } = await import("./route");
+    const { POST } = await import("@/app/api/contacts/route");
     const request = new Request("http://localhost/api/contacts", {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },
