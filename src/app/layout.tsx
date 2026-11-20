@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Archivo, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// Bascule de thème sans dépendre de l'hydratation React : un bouton HTML
-// natif + ce script inline. Il applique la préférence avant le rendu
-// (localStorage gagne, sinon le système : zéro flash), puis délègue les
-// clics sur [data-theme-toggle]. Fonctionne même si le bundle JS client
-// ne s'exécute pas.
+// Bascule de thème sans état React : un bouton HTML natif + ce script.
+// - Avant le rendu : applique la préférence (localStorage gagne, sinon le
+//   système : zéro flash). Injecté via next/script strategy
+//   « beforeInteractive », le mécanisme officiel — un <script> nu dans un
+//   composant React est ignoré au rendu client.
+// - Au clic : délègue sur [data-theme-toggle]. Le libellé du bouton est
+//   changé par CSS pur (deux spans, variante .dark) : le script ne touche
+//   jamais au texte, sinon il diverge du HTML hydraté par React.
 const themeScript = `(function(){
-function save(dark){try{localStorage.setItem("pipeline-theme",dark?"dark":"light")}catch(e){}}
 var stored=null;try{stored=localStorage.getItem("pipeline-theme")}catch(e){}
 var dark=stored==="dark"||(!stored&&window.matchMedia("(prefers-color-scheme: dark)").matches);
 document.documentElement.classList.toggle("dark",dark);
-function label(){var b=document.querySelector("[data-theme-toggle]");if(b)b.textContent=document.documentElement.classList.contains("dark")?"Mode clair":"Mode sombre";}
-if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",label)}else{label()}
 document.addEventListener("click",function(e){
 var b=e.target&&e.target.closest?e.target.closest("[data-theme-toggle]"):null;
 if(!b)return;
 var next=!document.documentElement.classList.contains("dark");
 document.documentElement.classList.toggle("dark",next);
-save(next);
-b.textContent=next?"Mode clair":"Mode sombre";
+try{localStorage.setItem("pipeline-theme",next?"dark":"light")}catch(e){}
 });
 })();`;
 
@@ -47,14 +47,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Script id="pipeline-theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
         <div className="fixed right-6 top-6 z-50">
           <button
             type="button"
             data-theme-toggle
             className="rounded border border-input bg-card px-3 py-1.5 text-sm font-medium transition-colors hover:border-foreground/40"
           >
-            Thème
+            {/* Libellé rendu par CSS seul : « Mode sombre » en clair,
+                « Mode clair » en sombre — ce que le clic va faire. */}
+            <span className="dark:hidden">Mode sombre</span>
+            <span className="hidden dark:inline">Mode clair</span>
           </button>
         </div>
         {children}
