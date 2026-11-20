@@ -1,0 +1,64 @@
+// Implémentation libsql/SQLite du port ContactsRepository.
+
+import { randomUUID } from "node:crypto";
+import type { Client, Row } from "@libsql/client";
+import {
+  FIRST_STAGE,
+  isStage,
+  type Contact,
+  type NewContactInput,
+} from "@/server/domain/contacts";
+import type { ContactsRepository } from "@/server/services/contacts";
+
+function rowToContact(row: Row): Contact {
+  const rawStage = row.stage;
+  if (!isStage(rawStage)) {
+    throw new Error(`Étape inconnue en base : ${String(rawStage)}`);
+  }
+  return {
+    id: String(row.id),
+    name: String(row.name),
+    email: row.email == null ? null : String(row.email),
+    company: row.company == null ? null : String(row.company),
+    stage: rawStage,
+    createdAt: String(row.created_at),
+    updatedAt: String(row.updated_at),
+  };
+}
+
+export class LibsqlContactsRepository implements ContactsRepository {
+  constructor(private readonly db: Client) {}
+
+  async list(): Promise<Contact[]> {
+    const result = await this.db.execute(
+      "SELECT id, name, email, company, stage, created_at, updated_at FROM contacts ORDER BY created_at",
+    );
+    return result.rows.map(rowToContact);
+  }
+
+  async add(input: NewContactInput): Promise<Contact> {
+    const now = new Date().toISOString();
+    const contact: Contact = {
+      id: randomUUID(),
+      name: input.name,
+      email: input.email ?? null,
+      company: input.company ?? null,
+      stage: FIRST_STAGE,
+      createdAt: now,
+      updatedAt: now,
+    };
+    await this.db.execute({
+      sql: "INSERT INTO contacts (id, name, email, company, stage, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      args: [
+        contact.id,
+        contact.name,
+        contact.email,
+        contact.company,
+        contact.stage,
+        contact.createdAt,
+        contact.updatedAt,
+      ],
+    });
+    return contact;
+  }
+}

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline — trois directions de design system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Chrome de la page de comparaison : neutre, effacé derrière les trois systèmes */
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Archivo", system-ui, sans-serif;
+    background: #14171A;
+    color: #E7E9EA;
+    padding: 48px 32px 96px;
+  }
+  body > header { max-width: 1180px; margin: 0 auto 40px; }
+  body > header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  body > header p { margin-top: 10px; font-size: 15px; color: #A6ADB3; max-width: 68ch; line-height: 1.55; }
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(360px, 1fr));
+    gap: 24px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1140px) { body { overflow-x: auto; } .options { min-width: 1120px; } }
+  .panel { border-radius: 14px; overflow: hidden; }
+  .panel section { padding: 28px 26px; }
+  .panel section + section { border-top: 1px solid var(--line); }
+  .lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .swatches { display: flex; gap: 10px; }
+  .sw { flex: 1; }
+  .swatch { height: 52px; border-radius: 8px; border: 1px solid var(--line); }
+  .sw span {
+    display: block; margin-top: 7px; padding: 0 2px;
+    font-size: 11px; font-weight: 500; color: var(--muted); line-height: 1.3;
+  }
+  .btnrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input { width: 100%; font: inherit; font-size: 14px; padding: 9px 12px; }
+  .field .err { font-size: 12px; margin-top: 5px; }
+  .card { margin-top: 0; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    padding: 5px 10px; border-radius: 999px;
+  }
+
+  /* ============================================================
+     A · COMPTOIR — encrier sur porcelaine
+     Grotesque Archivo, un seul accent profond, rayons serrés.
+     ============================================================ */
+  .a {
+    --bg: #F5F6F4; --surface: #FFFFFF; --ink: #1B1E23; --muted: #58616E;
+    --line: #D8DCE2; --accent: #14566B; --accent-ink: #FFFFFF; --accent-deep: #0E4252;
+    --danger: #A03024; --focus: rgba(20, 86, 107, 0.35);
+    background: var(--bg); color: var(--ink);
+    font-family: "Archivo", system-ui, sans-serif;
+    border: 1px solid var(--line);
+  }
+  .a h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 6px; }
+  .a .sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .a .type-demo h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .a .type-demo p { font-size: 14px; line-height: 1.6; max-width: 62ch; }
+  .a .type-demo .num { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+  .a input {
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px;
+  }
+  .a input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+  .a .err { color: var(--danger); }
+  .a button {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    padding: 9px 18px; border-radius: 6px; border: 1px solid transparent;
+    transition: background-color 140ms ease, border-color 140ms ease;
+  }
+  .a .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .a .btn-primary:hover { background: var(--accent-deep); }
+  .a .btn-secondary { background: transparent; color: var(--ink); border-color: #B9BFC8; }
+  .a .btn-secondary:hover { border-color: var(--ink); }
+  .a .btn-ghost { background: transparent; color: var(--muted); }
+  .a .btn-ghost:hover { color: var(--ink); background: #E9EBE6; }
+  .a button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .a .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 16px 18px; transition: box-shadow 160ms ease;
+  }
+  .a .card:hover { box-shadow: 0 2px 10px rgba(27, 30, 35, 0.08); }
+  .a .card .name { font-size: 15px; font-weight: 600; }
+  .a .card .meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .a .card .row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .a .card .date { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .a .chip { background: #E4EBEE; color: var(--accent-deep); }
+  .a .chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .a ::selection { background: rgba(20, 86, 107, 0.18); }
+
+  /* ============================================================
+     B · ARDOISE — établi de nuit
+     Serenlia serif sur ardoise vert-slate, ambre = seule urgence.
+     ============================================================ */
+  .b {
+    --bg: #1F2B2C; --surface: #273537; --ink: #E9EEEA; --muted: #A2B2AD;
+    --line: #3A4A4B; --accent: #E2A23B; --accent-ink: #21201A; --accent-deep: #C88A24;
+    --danger: #E2765E; --focus: rgba(226, 162, 59, 0.4);
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    border: 1px solid #16201F;
+  }
+  .b h2, .b .type-demo h3 {
+    font-family: "Source Serif 4", Georgia, serif; font-weight: 600;
+    letter-spacing: 0.005em;
+  }
+  .b h2 { font-size: 24px; margin-bottom: 6px; }
+  .b .sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .b .type-demo h3 { font-size: 19px; margin-bottom: 6px; }
+  .b .type-demo p { font-size: 14px; line-height: 1.65; max-width: 62ch; color: #CFD8D2; }
+  .b .type-demo .num { font-size: 13px; color: var(--accent); }
+  .b input {
+    background: #1C2728; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px;
+  }
+  .b input::placeholder { color: #7B8D88; }
+  .b input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+  .b .err { color: var(--danger); }
+  .b button {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    padding: 10px 20px; border-radius: 10px; border: 1px solid transparent;
+    transition: background-color 140ms ease, box-shadow 140ms ease;
+  }
+  .b .btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+  .b .btn-primary:hover { background: var(--accent-deep); }
+  .b .btn-secondary { background: transparent; color: var(--ink); border-color: var(--line); }
+  .b .btn-secondary:hover { border-color: var(--muted); }
+  .b .btn-ghost { background: transparent; color: var(--muted); }
+  .b .btn-ghost:hover { color: var(--ink); background: var(--surface); }
+  .b button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .b .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px; transition: border-color 160ms ease;
+  }
+  .b .card:hover { border-color: #4E6261; }
+  .b .card .name { font-family: "Source Serif 4", Georgia, serif; font-size: 16px; font-weight: 600; }
+  .b .card .meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .b .card .row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .b .card .date { font-size: 12px; color: var(--muted); }
+  .b .chip { background: rgba(226, 162, 59, 0.16); color: #EFC27C; }
+  .b .chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .b ::selection { background: rgba(226, 162, 59, 0.3); }
+
+  /* ============================================================
+     C · CARNET DE BORD — registre à cinq couleurs
+     IBM Plex, chaque étape du pipeline a son rôle coloré,
+     mono réservé aux données.
+     ============================================================ */
+  .c {
+    --bg: #F2F1EC; --surface: #FBFAF7; --ink: #23211D; --muted: #6B675E;
+    --line: #D9D6CC; --accent: #3D6549; --accent-ink: #FFFFFF; --accent-deep: #2E4F39;
+    --danger: #9C3A28; --focus: rgba(61, 101, 73, 0.35);
+    --s-new: #3B6EA5; --s-contacted: #71508A; --s-proposal: #8F6310;
+    --s-won: #3D6549; --s-lost: #807A6E;
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    border: 1px solid var(--line);
+  }
+  .c h2 { font-size: 21px; font-weight: 600; margin-bottom: 6px; }
+  .c .sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .c .type-demo h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .c .type-demo p { font-size: 14px; line-height: 1.6; max-width: 62ch; }
+  .c .type-demo .num { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--muted); }
+  .c input {
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 4px;
+  }
+  .c input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+  .c .err { color: var(--danger); }
+  .c button {
+    font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+    padding: 9px 16px; border-radius: 4px; border: 1px solid transparent;
+    transition: background-color 140ms ease;
+  }
+  .c .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .c .btn-primary:hover { background: var(--accent-deep); }
+  .c .btn-secondary { background: transparent; color: var(--ink); border-color: #BBB6A8; }
+  .c .btn-secondary:hover { border-color: var(--ink); }
+  .c .btn-ghost { background: transparent; color: var(--muted); }
+  .c .btn-ghost:hover { color: var(--ink); background: #E8E5DC; }
+  .c button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .c .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+    border-top: 3px solid var(--s-contacted); padding: 14px 16px 16px;
+  }
+  .c .card .name { font-size: 15px; font-weight: 600; }
+  .c .card .meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .c .card .row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line);
+  }
+  .c .card .date { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); }
+  .c .chip { background: rgba(113, 80, 138, 0.12); color: #59397A; border-radius: 4px; font-family: "IBM Plex Mono", monospace; text-transform: lowercase; }
+  .c .chip i { width: 7px; height: 7px; border-radius: 2px; background: var(--s-contacted); }
+  .c .stages { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .c .stages span {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+    padding: 4px 9px; border-radius: 4px; color: #fff;
+  }
+  .c ::selection { background: rgba(61, 101, 73, 0.2); }
+
+  .foot { max-width: 1180px; margin: 32px auto 0; font-size: 13px; color: #8A9199; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Pipeline — trois directions de design system</h1>
+  <p>Le même écran de travail, décliné en trois systèmes complets : palette, typographie,
+  boutons, champs, carte de contact. Chaque colonne est un système autonome ; comparez-les
+  côte à côte, puis choisissez-en un. Les données sont des exemples de démonstration.</p>
+</header>
+
+<div class="options">
+
+  <!-- ================= A ================= -->
+  <div class="panel a">
+    <section>
+      <h2>Comptoir</h2>
+      <p class="sub">Encrier sur porcelaine. Grotesque serrée, un seul accent profond,
+      aucune décoration : la liste des contacts reste la star.</p>
+    </section>
+    <section>
+      <div class="lbl">Couleurs</div>
+      <div class="swatches">
+        <div class="sw"><div class="swatch" style="background:#1B1E23"></div><span>#1B1E23 encre</span></div>
+        <div class="sw"><div class="swatch" style="background:#14566B"></div><span>#14566B bleu</span></div>
+        <div class="sw"><div class="swatch" style="background:#FFFFFF"></div><span>#FFF surface</span></div>
+        <div class="sw"><div class="swatch" style="background:#F5F6F4"></div><span>#F5F6F4 fond</span></div>
+      </div>
+    </section>
+    <section type-demo>
+      <div class="lbl">Typographie — Archivo</div>
+      <div class="type-demo">
+        <h3>Qui relancer cette semaine</h3>
+        <p>Sept contacts avancent cette semaine. Le titre se porte seul, sans
+        étiquette au-dessus ; le corps de texte reste à 14 pixels, calibré pour la lecture rapide.</p>
+        <p class="num">3 rendez-vous · 2 devis · 1 relance en retard</p>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Boutons</div>
+      <div class="btnrow">
+        <button class="btn-primary">Ajouter</button>
+        <button class="btn-secondary">Annuler</button>
+        <button class="btn-ghost">Filtrer</button>
+        <button disabled>Exporter</button>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Champs</div>
+      <div class="field">
+        <label for="a-nom">Nom</label>
+        <input id="a-nom" value="Camille Ferrand">
+      </div>
+      <div class="field">
+        <label for="a-mail">Email</label>
+        <input id="a-mail" value="camille valois">
+        <div class="err">Email invalide : « camille valois »</div>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Carte de contact</div>
+      <div class="card">
+        <div class="name">Camille Ferrand</div>
+        <div class="meta">Menuiserie Valois · camille@valois.fr</div>
+        <div class="row">
+          <span class="chip"><i></i>Contacté</span>
+          <span class="date">relance le 21 nov.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= B ================= -->
+  <div class="panel b">
+    <section>
+      <h2>Ardoise</h2>
+      <p class="sub">Établi de nuit. Ardoise vert-profond, serif de lecture aux titres,
+      et une seule couleur chaude (l'ambre) réservée à l'action et à l'urgence.</p>
+    </section>
+    <section>
+      <div class="lbl">Couleurs</div>
+      <div class="swatches">
+        <div class="sw"><div class="swatch" style="background:#1F2B2C"></div><span>#1F2B2C fond</span></div>
+        <div class="sw"><div class="swatch" style="background:#273537"></div><span>#273537 surface</span></div>
+        <div class="sw"><div class="swatch" style="background:#E2A23B"></div><span>#E2A23B ambre</span></div>
+        <div class="sw"><div class="swatch" style="background:#E9EEEA"></div><span>#E9EEEA texte</span></div>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Typographie — Source Serif 4 + système</div>
+      <div class="type-demo">
+        <h3>Qui relancer cette semaine</h3>
+        <p>Sept contacts avancent cette semaine. Les titres en serif posent le calme,
+        le corps reste en sans-système pour l'efficacité ; l'ambre signale ce qui demande
+        une décision.</p>
+        <p class="num">3 rendez-vous · 2 devis · 1 relance en retard</p>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Boutons</div>
+      <div class="btnrow">
+        <button class="btn-primary">Ajouter</button>
+        <button class="btn-secondary">Annuler</button>
+        <button class="btn-ghost">Filtrer</button>
+        <button disabled>Exporter</button>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Champs</div>
+      <div class="field">
+        <label for="b-nom">Nom</label>
+        <input id="b-nom" value="Thomas Wei">
+      </div>
+      <div class="field">
+        <label for="b-mail">Email</label>
+        <input id="b-mail" value="thomas kairos">
+        <div class="err">Email invalide : « thomas kairos »</div>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Carte de contact</div>
+      <div class="card">
+        <div class="name">Thomas Wei</div>
+        <div class="meta">Studio Kairos · t.wei@kairos.io</div>
+        <div class="row">
+          <span class="chip"><i></i>Proposition</span>
+          <span class="date">relance le 24 nov.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= C ================= -->
+  <div class="panel c">
+    <section>
+      <h2>Carnet de bord</h2>
+      <p class="sub">Registre à cinq couleurs. Chaque étape du pipeline a son rôle coloré,
+      le mono est réservé aux données, et la carte ressemble à une fiche qu'on épingle.</p>
+    </section>
+    <section>
+      <div class="lbl">Couleurs — rôles d'étapes</div>
+      <div class="swatches">
+        <div class="sw"><div class="swatch" style="background:#3B6EA5"></div><span>nouveau</span></div>
+        <div class="sw"><div class="swatch" style="background:#71508A"></div><span>contacté</span></div>
+        <div class="sw"><div class="swatch" style="background:#8F6310"></div><span>proposition</span></div>
+        <div class="sw"><div class="swatch" style="background:#3D6549"></div><span>gagné</span></div>
+      </div>
+      <div class="stages">
+        <span style="background:#3B6EA5">nouveau</span>
+        <span style="background:#71508A">contacté</span>
+        <span style="background:#8F6310">proposition</span>
+        <span style="background:#3D6549">gagné</span>
+        <span style="background:#5F5A50">perdu</span>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Typographie — IBM Plex Sans + Mono</div>
+      <div class="type-demo">
+        <h3>Qui relancer cette semaine</h3>
+        <p>Sept contacts avancent cette semaine. Les libellés en Plex Sans,
+        les dates et les compteurs en Plex Mono : ce qui se mesure change de fonte.</p>
+        <p class="num">3 rendez-vous · 2 devis · 1 relance en retard</p>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Boutons</div>
+      <div class="btnrow">
+        <button class="btn-primary">Ajouter</button>
+        <button class="btn-secondary">Annuler</button>
+        <button class="btn-ghost">Filtrer</button>
+        <button disabled>Exporter</button>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Champs</div>
+      <div class="field">
+        <label for="c-nom">Nom</label>
+        <input id="c-nom" value="Nadia Bouchard">
+      </div>
+      <div class="field">
+        <label for="c-mail">Email</label>
+        <input id="c-mail" value="nadia coteau">
+        <div class="err">Email invalide : « nadia coteau »</div>
+      </div>
+    </section>
+    <section>
+      <div class="lbl">Carte de contact</div>
+      <div class="card">
+        <div class="name">Nadia Bouchard</div>
+        <div class="meta">Ferme du Coteau · nadia@coteau.fr</div>
+        <div class="row">
+          <span class="chip"><i></i>contacté</span>
+          <span class="date">relance 2025-11-21</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<p class="foot">Ouvre ce fichier dans ton navigateur (fichier &rsaquo; ouvrir), compare, puis donne
+à l'agent le nom du système choisi — il l'appliquera au thème shadcn de l'app.</p>
+</body>
+</html>
