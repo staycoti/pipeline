@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Archivo, Geist_Mono } from "next/font/google";
+import { Button } from "@/components/ui/button";
 import "./globals.css";
 
 // Bascule de thème sans état React : un bouton HTML natif + ce script.
@@ -56,16 +57,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {themeScript}
         </Script>
         <div className="fixed right-6 top-6 z-50">
-          <button
+          {/* Button shadcn (outline) : le script délègue toujours les clics
+              sur [data-theme-toggle] ; libellé rendu par CSS seul (« Mode
+              sombre » en clair, « Mode clair » en sombre). */}
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             data-theme-toggle
-            className="rounded border border-input bg-card px-3 py-1.5 text-sm font-medium transition-colors hover:border-foreground/40"
           >
-            {/* Libellé rendu par CSS seul : « Mode sombre » en clair,
-                « Mode clair » en sombre — ce que le clic va faire. */}
             <span className="dark:hidden">Mode sombre</span>
             <span className="hidden dark:inline">Mode clair</span>
-          </button>
+          </Button>
         </div>
         {children}
       </body>

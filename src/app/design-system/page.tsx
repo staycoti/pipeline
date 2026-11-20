@@ -1,5 +1,15 @@
 // Vitre du design system « Comptoir » : tokens et composants du thème
 // appliqué à l'app, rendus avec le thème lui-même (aucune donnée, aucune base).
+// Chaque section montre le composant shadcn réel utilisé dans l'app.
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Le libellé n'affiche pas de valeur hexadécimale : elle diffère entre
 // mode clair et mode sombre. La pastille, elle, montre la vraie valeur
@@ -39,7 +49,8 @@ export default function DesignSystemPage() {
       <p className="mt-2 max-w-[60ch] text-muted-foreground">
         Design system de Pipeline : encrier sur porcelaine, un accent bleu profond
         unique, typo Archivo. Ce que cette page affiche est exactement ce que
-        l&apos;app utilise, défini dans globals.css.
+        l&apos;app utilise : composants shadcn habillés par les tokens de
+        globals.css. Chaque section est le composant réel, pas une copie.
       </p>
 
       <Section title="Couleurs">
@@ -72,77 +83,56 @@ export default function DesignSystemPage() {
         </div>
       </Section>
 
-      <Section title="Boutons">
+      <Section title="Boutons — Button">
         <div className="flex flex-wrap items-center gap-3">
-          <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-            Primaire
-          </button>
-          <button className="rounded border border-input bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-foreground/40">
-            Secondaire
-          </button>
-          <button className="rounded px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
-            Fantôme
-          </button>
-          <button
-            disabled
-            className="cursor-not-allowed rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground opacity-45"
-          >
-            Désactivé
-          </button>
-          <button className="rounded bg-destructive px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90">
-            Destructif
-          </button>
+          <Button>Primaire</Button>
+          <Button variant="outline">Secondaire</Button>
+          <Button variant="ghost">Fantôme</Button>
+          <Button disabled>Désactivé</Button>
+          <Button variant="destructive">Destructif</Button>
         </div>
       </Section>
 
-      <Section title="Champs">
+      <Section title="Champs — Label + Input">
         <div className="grid max-w-md gap-4">
-          <label className="block">
-            <span className="mb-1.5 block text-sm font-medium">Nom</span>
-            <input
-              defaultValue="Camille Ferrand"
-              className="w-full rounded border border-input bg-card p-2 text-sm placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/40"
-            />
-          </label>
-          <label className="block">
-            <span className="mb-1.5 block text-sm font-medium">Email</span>
-            <input
-              defaultValue="camille valois"
-              className="w-full rounded border border-destructive/60 bg-card p-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-destructive/40"
-            />
-            <span className="mt-1 block text-xs text-destructive">
+          <div className="grid gap-1.5">
+            <Label htmlFor="ds-nom">Nom</Label>
+            <Input id="ds-nom" defaultValue="Camille Ferrand" />
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="ds-mail">Email</Label>
+            <Input id="ds-mail" aria-invalid defaultValue="camille valois" />
+            <span className="text-xs text-destructive">
               Email invalide : saisie sans arobase.
             </span>
-          </label>
-          <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-muted-foreground">
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="ds-soc" className="text-muted-foreground">
               Société
-            </span>
-            <input
-              disabled
-              placeholder="Lecture seule"
-              className="w-full cursor-not-allowed rounded border border-input bg-secondary/60 p-2 text-sm text-muted-foreground"
-            />
-          </label>
+            </Label>
+            <Input id="ds-soc" disabled placeholder="Lecture seule" />
+          </div>
         </div>
       </Section>
 
-      <Section title="Carte de contact et étape">
-        <div className="max-w-sm rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md">
-          <div className="text-sm font-semibold">Camille Ferrand</div>
-          <div className="mt-0.5 text-sm text-muted-foreground">
-            Menuiserie Valois · camille@valois.fr
-          </div>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              Contacté
-            </span>
-            <span className="text-xs tabular-nums text-muted-foreground">
-              relance le 21 nov.
-            </span>
-          </div>
-        </div>
+      <Section title="Carte de contact et étape — Card + Badge">
+        <Card className="max-w-sm">
+          <CardContent>
+            <div className="text-sm font-semibold">Camille Ferrand</div>
+            <div className="mt-0.5 text-sm text-muted-foreground">
+              Menuiserie Valois · camille@valois.fr
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <Badge className="gap-1.5 bg-accent text-accent-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Contacté
+              </Badge>
+              <span className="text-xs tabular-nums text-muted-foreground">
+                relance le 21 nov.
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </Section>
 
       <Section title="Bandeaux">
