@@ -42,8 +42,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // suppressHydrationWarning sur <html> : motif officiel Next (guide dark
+    // mode). Le script beforeInteractive ajoute la classe « dark » avant
+    // l'hydratation ; React verrait un attribut différent du sien et leverait
+    // un avertissement. Seul cet élément est dispensé, rien d'autre.
     <html
       lang="fr"
+      suppressHydrationWarning
       className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
